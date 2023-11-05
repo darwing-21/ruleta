@@ -8,9 +8,44 @@ const Stack = createStackNavigator();
 function AppStack() {
   return (
     <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen name="Prueba" component={Routes.Prueba} />
-        <Stack.Screen name="Prueba2" component={Routes.Prueba2} />
+      <Stack.Navigator initialRouteName="Home">
+        <Stack.Screen
+          name="HomeScreen"
+          component={Routes.HomeScreen}
+          options={{
+            title: 'Inicio',
+            headerTitleStyle: {
+              fontSize: 20,
+              color: '#0a0a0a',
+              fontWeight: 'bold',
+            },
+          }}
+        />
+
+        <Stack.Screen
+          name="Prueba"
+          component={Routes.Prueba}
+          options={{
+            title: 'Simulador de jugador 1',
+            headerTitleStyle: {
+              fontSize: 20,
+              color: '#0a0a0a',
+              fontWeight: 'bold',
+            },
+          }}
+        />
+        <Stack.Screen
+          name="Prueba2"
+          component={Routes.Prueba2}
+          options={{
+            title: 'Simulador de jugador 2',
+            headerTitleStyle: {
+              fontSize: 20,
+              color: '#0a0a0a',
+              fontWeight: 'bold',
+            },
+          }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
