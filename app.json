@@ -1,4 +1,11 @@
 {
   "name": "ruleta",
-  "displayName": "ruleta"
+  "displayName": "ruleta",
+  "expo": {
+    "extra": {
+      "eas": {
+        "projectId": "858416f6-b0a7-4407-bcf5-17865c958aff"
+      }
+    }
+  }
 }

@@ -1,5 +1,13 @@
 import React, {useState} from 'react';
-import {View, Text, TextInput, Button, Alert, StyleSheet} from 'react-native';
+import {
+  View,
+  Text,
+  TextInput,
+  Button,
+  Alert,
+  StyleSheet,
+  ScrollView,
+} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
 const Prueba = () => {
@@ -8,6 +16,7 @@ const Prueba = () => {
   const [numero, setNumero] = useState('');
   const [resultado, setResultado] = useState('');
   const [iteraciones, setIteraciones] = useState([]);
+  const [cantidadFinal, setCantidadFinal] = useState('');
 
   const handleCalcular = () => {
     if (numero === '') {
@@ -21,29 +30,52 @@ const Prueba = () => {
       ) {
         setResultado(`Número ingresado: ${numeroParseado}`);
         const iteracionesArray = [];
+        let cantidad = 200;
+        let apuesta = 1;
+        let cantidadN;
+        let gano = 'NINGUNO';
+        let color;
+
         for (let i = 1; i <= numeroParseado; i++) {
           const aleatorio = Math.round(Math.random() * 1000) / 1000;
-          let color;
+
           if (aleatorio >= 0 && aleatorio < 0.45) {
             color = 'ROJO';
+            if (gano === 'VERDE') {
+              cantidadN = cantidad;
+            } else {
+              cantidadN = cantidad + apuesta;
+            }
+            gano = 'SI';
           } else if (aleatorio >= 0.45 && aleatorio < 0.91) {
             color = 'NEGRO';
+            if (gano == 'VERDE') {
+              cantidadN = cantidad - apuesta;
+            } else {
+              cantidadN = cantidad - apuesta;
+            }
+            gano = 'NO';
           } else {
+            cantidadN = cantidad;
             color = 'VERDE';
+            gano = 'VERDE';
           }
           const iteracion = {
             i: i,
-            cantidad: 200,
+            cantidad: cantidad,
+            apuesta:apuesta,
             numeroAleatorio: aleatorio,
             color: color,
-            cantidadNueva: 200 + i,
+            cantidadNueva: cantidadN,
             termina: 'NO',
-            gano: 'SI',
+            gano: gano,
           };
+          cantidad = cantidadN;
           iteracionesArray.push(iteracion);
         }
 
         setIteraciones(iteracionesArray);
+        setCantidadFinal(cantidad);
       } else {
         Alert.alert(
           'Error',
@@ -53,51 +85,62 @@ const Prueba = () => {
     }
   };
   return (
-    <View style={styles.container}>
-      <View style={styles.table}>
-        <View style={styles.tableRow}>
-          <Text style={styles.tableHeader}>Piezas</Text>
-          <Text style={styles.tableHeader}>Cantidad</Text>
-          <Text style={styles.tableHeader}>Probabilidad acumulada</Text>
+    <ScrollView contentContainerStyle={styles.scrollContainer}>
+      <View style={styles.container}>
+        <View style={styles.table}>
+          <View style={styles.tableRow}>
+            <Text style={styles.tableHeader}>Piezas</Text>
+            <Text style={styles.tableHeader}>Cantidad</Text>
+            <Text style={styles.tableHeader}>Probabilidad acumulada</Text>
+          </View>
+          <View style={styles.tableRow}>
+            <Text style={styles.tableData}>ROJAS</Text>
+            <Text style={styles.tableData}>10</Text>
+            <Text style={styles.tableData}>0.45</Text>
+          </View>
+          <View style={styles.tableRow}>
+            <Text style={styles.tableData}>NEGRAS</Text>
+            <Text style={styles.tableData}>10</Text>
+            <Text style={styles.tableData}>0.91</Text>
+          </View>
+          <View style={styles.tableRow}>
+            <Text style={styles.tableData}>VERDES</Text>
+            <Text style={styles.tableData}>2</Text>
+            <Text style={styles.tableData}>1.00</Text>
+          </View>
         </View>
-        <View style={styles.tableRow}>
-          <Text style={styles.tableData}>ROJAS</Text>
-          <Text style={styles.tableData}>10</Text>
-          <Text style={styles.tableData}>0.45</Text>
+        <View style={styles.inputContainer}>
+          <Text>Numero de corrida:</Text>
+          <TextInput
+            style={styles.input}
+            onChangeText={text => setNumero(text)}
+            keyboardType="numeric"
+            value={numero}
+          />
         </View>
+        <Button title="Simular" onPress={handleCalcular} />
         <View style={styles.tableRow}>
-          <Text style={styles.tableData}>NEGRAS</Text>
-          <Text style={styles.tableData}>10</Text>
-          <Text style={styles.tableData}>0.91</Text>
+          <Text style={styles.tableData}>N</Text>
+          <Text style={styles.tableData}>Cant</Text>
+          <Text style={styles.tableData}>Apuesta</Text>
+          <Text style={styles.tableData}>Aleatorio</Text>
+          <Text style={styles.tableData}>Color</Text>
         </View>
-        <View style={styles.tableRow}>
-          <Text style={styles.tableData}>VERDES</Text>
-          <Text style={styles.tableData}>2</Text>
-          <Text style={styles.tableData}>1.00</Text>
+        {iteraciones.map((iteracion, index) => (
+          <View style={styles.tableRow} key={index}>
+            <Text style={styles.tableData}>{iteracion.i}</Text>
+            <Text style={styles.tableData}>{iteracion.cantidad}</Text>
+            <Text style={styles.tableData}>{iteracion.apuesta}</Text>
+            <Text style={styles.tableData}>{iteracion.numeroAleatorio}</Text>
+            <Text style={styles.tableData}>{iteracion.color}</Text>
+          </View>
+        ))}
+        <View style={styles.textContainer}>
+          <Text style={styles.label}>Cantidad final: </Text>
+          <Text style={styles.boldText}>{cantidadFinal}</Text>
         </View>
       </View>
-      <View style={styles.inputContainer}>
-        <Text>Numero de corrida:</Text>
-        <TextInput
-          style={styles.input}
-          onChangeText={text => setNumero(text)}
-          keyboardType="numeric"
-          value={numero}
-        />
-      </View>
-      <Button title="Simular" onPress={handleCalcular} />
-      {iteraciones.map((iteracion, index) => (
-        <View style={styles.tableRow} key={index}>
-          <Text style={styles.tableData}>{iteracion.i}</Text>
-          <Text style={styles.tableData}>{iteracion.cantidad}</Text>
-          <Text style={styles.tableData}>{iteracion.numeroAleatorio}</Text>
-          <Text style={styles.tableData}>{iteracion.color}</Text>
-          <Text style={styles.tableData}>{iteracion.cantidadNueva}</Text>
-          <Text style={styles.tableData}>{iteracion.termina}</Text>
-          <Text style={styles.tableData}>{iteracion.gano}</Text>
-        </View>
-      ))}
-    </View>
+    </ScrollView>
   );
 };
 
@@ -106,6 +149,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    marginTop: 20,
   },
   table: {
     borderWidth: 1,
@@ -144,6 +188,16 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 10,
+  },
+  textContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  label: {
+    fontWeight: 'bold',
+  },
+  boldText: {
+    fontWeight: 'bold',
   },
 });
 
