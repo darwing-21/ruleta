@@ -46,6 +46,30 @@ function AppStack() {
             },
           }}
         />
+        <Stack.Screen
+          name="Comparacion"
+          component={Routes.Comparacion}
+          options={{
+            title: 'Simular la comparacion',
+            headerTitleStyle: {
+              fontSize: 20,
+              color: '#0a0a0a',
+              fontWeight: 'bold',
+            },
+          }}
+        />
+        <Stack.Screen
+          name="Jugar"
+          component={Routes.Jugar}
+          options={{
+            title: 'Jugar',
+            headerTitleStyle: {
+              fontSize: 20,
+              color: '#0a0a0a',
+              fontWeight: 'bold',
+            },
+          }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
