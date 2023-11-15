@@ -16,8 +16,11 @@ function AppStack() {
             title: 'Inicio',
             headerTitleStyle: {
               fontSize: 20,
-              color: '#0a0a0a',
+              color: '#ffffff',
               fontWeight: 'bold',
+            },
+            headerStyle: {
+              backgroundColor: '#8B65BF',
             },
           }}
         />
@@ -29,8 +32,12 @@ function AppStack() {
             title: 'Simulador de jugador 1',
             headerTitleStyle: {
               fontSize: 20,
-              color: '#0a0a0a',
+              color: '#ffffff',
               fontWeight: 'bold',
+              
+            },
+            headerStyle: {
+              backgroundColor: '#8B65BF',
             },
           }}
         />
@@ -41,8 +48,11 @@ function AppStack() {
             title: 'Simulador de jugador 2',
             headerTitleStyle: {
               fontSize: 20,
-              color: '#0a0a0a',
+              color: '#ffffff',
               fontWeight: 'bold',
+            },
+            headerStyle: {
+              backgroundColor: '#8B65BF',
             },
           }}
         />
@@ -53,8 +63,11 @@ function AppStack() {
             title: 'Simular la comparacion',
             headerTitleStyle: {
               fontSize: 20,
-              color: '#0a0a0a',
+              color: '#ffffff',
               fontWeight: 'bold',
+            },
+            headerStyle: {
+              backgroundColor: '#8B65BF',
             },
           }}
         />
@@ -65,8 +78,11 @@ function AppStack() {
             title: 'Jugar',
             headerTitleStyle: {
               fontSize: 20,
-              color: '#0a0a0a',
+              color: '#ffffff',
               fontWeight: 'bold',
+            },
+            headerStyle: {
+              backgroundColor: '#8B65BF',
             },
           }}
         />
