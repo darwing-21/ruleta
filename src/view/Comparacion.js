@@ -10,12 +10,14 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+import Pie from 'react-native-pie';
 
 const Comparacion = () => {
   const navigation = useNavigation();
+  const [mostrarGrafico, setMostrarGrafico] = useState(false);
   const [apuesta, setApuesta] = useState('1');
   const [color, setColor] = useState('ROJO');
-  const [corrida, setCorrida] = useState('10');
+  const [corrida, setCorrida] = useState('100');
   const [cantidad, setCantidad] = useState('200');
   const [cantidadFinal2, setCantidadFinal2] = useState('');
   const [cantidadFinal1, setCantidadFinal1] = useState('');
@@ -207,6 +209,7 @@ const Comparacion = () => {
       setIteraciones2(iteracionesArray2);
       setCantidadFinal2(cantidadI2);
       contarColors(colorsArray);
+      setMostrarGrafico(true);
 
       if (cantidadI > cantidadI2) {
         setEstrategia(
@@ -266,58 +269,82 @@ const Comparacion = () => {
         <TouchableOpacity style={styles.button} onPress={handleCalcular}>
           <Text style={styles.buttonText}>Simular</Text>
         </TouchableOpacity>
+        {mostrarGrafico && (
+          <>
+            <Text style={styles.title}>ESTRATEGIA JUGADOR 1</Text>
+            <View style={styles.tableRow}>
+              <Text style={styles.tableHeader}>N</Text>
+              <Text style={styles.tableHeader}>Cant</Text>
+              <Text style={styles.tableHeader}>Apuesta</Text>
+              <Text style={styles.tableHeader}>Aleatorio</Text>
+              <Text style={styles.tableHeader}>Color</Text>
+            </View>
+            {iteraciones1.map((iteracion, index) => (
+              <View style={styles.tableRow} key={index}>
+                <Text style={styles.tableData}>{iteracion.i}</Text>
+                <Text style={styles.tableData}>{iteracion.cantidad}</Text>
+                <Text style={styles.tableData}>{iteracion.apuesta}</Text>
+                <Text style={styles.tableData}>{iteracion.aleatorio}</Text>
+                <Text style={styles.tableData}>{iteracion.color}</Text>
+              </View>
+            ))}
+            <View style={styles.textContainer}>
+              <Text style={styles.p}>Cantidad final: </Text>
+              <Text style={styles.boldText}>{cantidadFinal1}</Text>
+            </View>
+            <Text style={styles.title}>ESTRATEGIA JUGADOR 2</Text>
+            <View style={styles.tableRow}>
+              <Text style={styles.tableHeader}>N</Text>
+              <Text style={styles.tableHeader}>Cant</Text>
+              <Text style={styles.tableHeader}>Apuesta</Text>
+              <Text style={styles.tableHeader}>Aleatorio</Text>
+              <Text style={styles.tableHeader}>Color</Text>
+            </View>
+            {iteraciones2.map((iteracion, index) => (
+              <View style={styles.tableRow} key={index}>
+                <Text style={styles.tableData}>{iteracion.i}</Text>
+                <Text style={styles.tableData}>{iteracion.cantidad}</Text>
+                <Text style={styles.tableData}>{iteracion.apuesta}</Text>
+                <Text style={styles.tableData}>{iteracion.aleatorio}</Text>
+                <Text style={styles.tableData}>{iteracion.color}</Text>
+              </View>
+            ))}
+            <View style={styles.textContainer}>
+              <Text style={styles.p}>Cantidad final: </Text>
+              <Text style={styles.boldText}>{cantidadFinal2}</Text>
+            </View>
 
-        <Text style={styles.title}>ESTRATEGIA JUGADOR 1</Text>
-        <View style={styles.tableRow}>
-          <Text style={styles.tableHeader}>N</Text>
-          <Text style={styles.tableHeader}>Cant</Text>
-          <Text style={styles.tableHeader}>Apuesta</Text>
-          <Text style={styles.tableHeader}>Aleatorio</Text>
-          <Text style={styles.tableHeader}>Color</Text>
-        </View>
-        {iteraciones1.map((iteracion, index) => (
-          <View style={styles.tableRow} key={index}>
-            <Text style={styles.tableData}>{iteracion.i}</Text>
-            <Text style={styles.tableData}>{iteracion.cantidad}</Text>
-            <Text style={styles.tableData}>{iteracion.apuesta}</Text>
-            <Text style={styles.tableData}>{iteracion.aleatorio}</Text>
-            <Text style={styles.tableData}>{iteracion.color}</Text>
-          </View>
-        ))}
-        <View style={styles.textContainer}>
-          <Text style={styles.p}>Cantidad final: </Text>
-          <Text style={styles.boldText}>{cantidadFinal1}</Text>
-        </View>
-        <Text style={styles.title}>ESTRATEGIA JUGADOR 2</Text>
-        <View style={styles.tableRow}>
-          <Text style={styles.tableHeader}>N</Text>
-          <Text style={styles.tableHeader}>Cant</Text>
-          <Text style={styles.tableHeader}>Apuesta</Text>
-          <Text style={styles.tableHeader}>Aleatorio</Text>
-          <Text style={styles.tableHeader}>Color</Text>
-        </View>
-        {iteraciones2.map((iteracion, index) => (
-          <View style={styles.tableRow} key={index}>
-            <Text style={styles.tableData}>{iteracion.i}</Text>
-            <Text style={styles.tableData}>{iteracion.cantidad}</Text>
-            <Text style={styles.tableData}>{iteracion.apuesta}</Text>
-            <Text style={styles.tableData}>{iteracion.aleatorio}</Text>
-            <Text style={styles.tableData}>{iteracion.color}</Text>
-          </View>
-        ))}
-        <View style={styles.textContainer}>
-          <Text style={styles.p}>Cantidad final: </Text>
-          <Text style={styles.boldText}>{cantidadFinal2}</Text>
-        </View>
+            <View style={styles.textContainer}>
+              <Text style={styles.p}>Cantidad de colores: </Text>
+              <Text style={styles.boldText}> ROJO = {rojo};</Text>
+              <Text style={styles.boldText}> NEGRO = {negro};</Text>
+              <Text style={styles.boldText}> VERDE = {verde};</Text>
+            </View>
 
-        <View style={styles.textContainer}>
-          <Text style={styles.p}>Cantidad de colores: </Text>
-          <Text style={styles.boldText}> ROJO = {rojo};</Text>
-          <Text style={styles.boldText}> NEGRO = {negro};</Text>
-          <Text style={styles.boldText}> VERDE = {verde};</Text>
-        </View>
-
-        <Text style={styles.title}>{estrategia}</Text>
+            
+            <View style={styles.chartContainer}>
+              <Pie
+                radius={80}
+                sections={[
+                  {
+                    percentage: rojo,
+                    color: 'red',
+                  },
+                  {
+                    percentage: negro,
+                    color: 'black',
+                  },
+                  {
+                    percentage: verde,
+                    color: 'green',
+                  },
+                ]}
+                strokeCap={'butt'}
+              />
+            </View>
+            <Text style={styles.title}>{estrategia}</Text>
+          </>
+        )}
       </View>
     </ScrollView>
   );

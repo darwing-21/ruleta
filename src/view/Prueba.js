@@ -1,21 +1,14 @@
 import React, {useState} from 'react';
-import {
-  View,
-  Text,
-  TextInput,
-  Button,
-  Alert,
-  StyleSheet,
-  ScrollView,
-  TouchableOpacity,
-} from 'react-native';
+import {View,Text,TextInput,Button,Alert,StyleSheet,ScrollView,TouchableOpacity,} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+import Pie from 'react-native-pie';
 
 const Prueba = () => {
   const navigation = useNavigation();
+  const [mostrarGrafico, setMostrarGrafico] = useState(false);
   const [apuesta, setApuesta] = useState('1');
   const [color, setColor] = useState('ROJO');
-  const [corrida, setCorrida] = useState('10');
+  const [corrida, setCorrida] = useState('100');
   const [cantidad, setCantidad] = useState('200');
   const [cantidadFinal, setCantidadFinal] = useState('');
   const [iteraciones, setIteraciones] = useState([]);
@@ -160,6 +153,7 @@ const Prueba = () => {
       contarColors(colorsArray);
       setIteraciones(iteracionesArray);
       setCantidadFinal(cantidadI);
+      setMostrarGrafico(true);
     }
   };
 
@@ -207,33 +201,56 @@ const Prueba = () => {
         <TouchableOpacity style={styles.button} onPress={handleCalcular}>
           <Text style={styles.buttonText}>Simular</Text>
         </TouchableOpacity>
-
-        <View style={styles.tableRow}>
-          <Text style={styles.tableHeader}>N</Text>
-          <Text style={styles.tableHeader}>Cant</Text>
-          <Text style={styles.tableHeader}>Apuesta</Text>
-          <Text style={styles.tableHeader}>Aleatorio</Text>
-          <Text style={styles.tableHeader}>Color</Text>
-        </View>
-        {iteraciones.map((iteracion, index) => (
-          <View style={styles.tableRow} key={index}>
-            <Text style={styles.tableData}>{iteracion.i}</Text>
-            <Text style={styles.tableData}>{iteracion.cantidad}</Text>
-            <Text style={styles.tableData}>{iteracion.apuesta}</Text>
-            <Text style={styles.tableData}>{iteracion.aleatorio}</Text>
-            <Text style={styles.tableData}>{iteracion.color}</Text>
-          </View>
-        ))}
-        <View style={styles.textContainer}>
-          <Text style={styles.p}>Cantidad final: </Text>
-          <Text style={styles.boldText}>{cantidadFinal}</Text>
-        </View>
-        <View style={styles.textContainer}>
-          <Text style={styles.p}>Cantidad de colores: </Text>
-          <Text style={styles.boldText}> ROJO = {rojo};</Text>
-          <Text style={styles.boldText}> NEGRO = {negro};</Text>
-          <Text style={styles.boldText}> VERDE = {verde};</Text>
-        </View>
+        {mostrarGrafico && (
+          <>
+            <View style={styles.tableRow}>
+              <Text style={styles.tableHeader}>N</Text>
+              <Text style={styles.tableHeader}>Cant</Text>
+              <Text style={styles.tableHeader}>Apuesta</Text>
+              <Text style={styles.tableHeader}>Aleatorio</Text>
+              <Text style={styles.tableHeader}>Color</Text>
+            </View>
+            {iteraciones.map((iteracion, index) => (
+              <View style={styles.tableRow} key={index}>
+                <Text style={styles.tableData}>{iteracion.i}</Text>
+                <Text style={styles.tableData}>{iteracion.cantidad}</Text>
+                <Text style={styles.tableData}>{iteracion.apuesta}</Text>
+                <Text style={styles.tableData}>{iteracion.aleatorio}</Text>
+                <Text style={styles.tableData}>{iteracion.color}</Text>
+              </View>
+            ))}
+            <View style={styles.textContainer}>
+              <Text style={styles.p}>Cantidad final: </Text>
+              <Text style={styles.boldText}>{cantidadFinal}</Text>
+            </View>
+            <View style={styles.textContainer}>
+              <Text style={styles.p}>Cantidad de colores: </Text>
+              <Text style={styles.boldText}> ROJO = {rojo};</Text>
+              <Text style={styles.boldText}> NEGRO = {negro};</Text>
+              <Text style={styles.boldText}> VERDE = {verde};</Text>
+            </View>
+            <View style={styles.chartContainer}>
+              <Pie
+                radius={80}
+                sections={[
+                  {
+                    percentage: rojo,
+                    color: 'red',
+                  },
+                  {
+                    percentage: negro,
+                    color: 'black',
+                  },
+                  {
+                    percentage: verde,
+                    color: 'green',
+                  },
+                ]}
+                strokeCap={'butt'}
+              />
+            </View>
+          </>
+        )}
       </View>
     </ScrollView>
   );

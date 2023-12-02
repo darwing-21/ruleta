@@ -75,7 +75,7 @@ function AppStack() {
           name="Jugar"
           component={Routes.Jugar}
           options={{
-            title: 'Jugar',
+            title: 'Ayuda',
             headerTitleStyle: {
               fontSize: 20,
               color: '#ffffff',

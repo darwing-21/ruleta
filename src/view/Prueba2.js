@@ -10,12 +10,14 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+import Pie from 'react-native-pie';
 
 const Prueba = () => {
   const navigation = useNavigation();
+  const [mostrarGrafico, setMostrarGrafico] = useState(false);
   const [apuesta, setApuesta] = useState('1');
   const [color, setColor] = useState('ROJO');
-  const [corrida, setCorrida] = useState('10');
+  const [corrida, setCorrida] = useState('100');
   const [cantidad, setCantidad] = useState('200');
   const [cantidadFinal, setCantidadFinal] = useState('');
   const [iteraciones, setIteraciones] = useState([]);
@@ -159,6 +161,7 @@ const Prueba = () => {
       contarColors(colorsArray);
       setIteraciones(iteracionesArray);
       setCantidadFinal(cantidadI);
+      setMostrarGrafico(true);
     }
   };
 
@@ -206,7 +209,7 @@ const Prueba = () => {
         <TouchableOpacity style={styles.button} onPress={handleCalcular}>
           <Text style={styles.buttonText}>Simular</Text>
         </TouchableOpacity>
-
+        {mostrarGrafico && (<>
         <View style={styles.tableRow}>
           <Text style={styles.tableHeader}>N</Text>
           <Text style={styles.tableHeader}>Cant</Text>
@@ -233,6 +236,28 @@ const Prueba = () => {
           <Text style={styles.boldText}> NEGRO = {negro};</Text>
           <Text style={styles.boldText}> VERDE = {verde};</Text>
         </View>
+        <View style={styles.chartContainer}>
+              <Pie
+                radius={80}
+                sections={[
+                  {
+                    percentage: rojo,
+                    color: 'red',
+                  },
+                  {
+                    percentage: negro,
+                    color: 'black',
+                  },
+                  {
+                    percentage: verde,
+                    color: 'green',
+                  },
+                ]}
+                strokeCap={'butt'}
+              />
+            </View>
+          </>
+        )}
       </View>
     </ScrollView>
   );

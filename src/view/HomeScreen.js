@@ -18,14 +18,14 @@ const HomeScreen = ({navigation}) => {
       <TouchableOpacity
         style={styles.button}
         onPress={() => navigation.navigate('Comparacion')}>
-        <Text style={styles.buttonText}>Comparacion de estrategias</Text>
+        <Text style={styles.buttonText}>Comparación de estrategias</Text>
       </TouchableOpacity>
       
-      {/* <TouchableOpacity
+       <TouchableOpacity
         style={styles.button}
         onPress={() => navigation.navigate('Jugar')}>
-        <Text style={styles.buttonText}>Jugar</Text>
-      </TouchableOpacity> */}
+        <Text style={styles.buttonText}>Ayuda</Text>
+      </TouchableOpacity> 
     
       <Image
         source={require('../image/ruleta.png')}
