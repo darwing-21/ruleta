@@ -43,7 +43,7 @@ const Jugar = ({navigation}) => {
         <View style={styles.infoContainer}>
           <Image
             source={require('../image/form1.png')}
-            style={styles.image}></Image>
+            style={styles.image} resizeMode="contain" ></Image>
           <Text style={styles.text1}>
             <Text style={styles.boldText}>- Cant.corridas:</Text> Indica el
             número de iteraciones que se realizarán.
@@ -60,7 +60,7 @@ const Jugar = ({navigation}) => {
         <View style={styles.infoContainer}>
           <Image
             source={require('../image/Tabla.png')}
-            style={styles.image}></Image>
+            style={styles.image} resizeMode="contain" ></Image>
           <Text style={styles.text1}>
             <Text style={styles.boldText}>- N:</Text> Indica el número de la
             iteración actual.
@@ -80,7 +80,7 @@ const Jugar = ({navigation}) => {
         <View style={styles.infoContainer}>
           <Image
             source={require('../image/probalilidad.png')}
-            style={styles.image}></Image>
+            style={styles.image} resizeMode="contain" ></Image>
           <Text style={styles.text1}>
             <Text style={styles.boldText}>- Piezas rojas:</Text> El problema
             establece que se cuentan con 10 piezas.
@@ -146,6 +146,7 @@ const styles = StyleSheet.create({
   },
   image: {
     alignSelf: 'center',
+    width: '90%',
   },
   boldText: {
     fontWeight: 'bold',
