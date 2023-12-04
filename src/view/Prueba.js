@@ -261,11 +261,11 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     paddingTop: 10,
-    backgroundColor: '#E4CEF2',
+    backgroundColor: '#e6e6e8',
   },
   formContainer: {
     flexDirection: 'column',
-    backgroundColor: '#E4CEF2',
+    backgroundColor: '#a3a8b7',
     padding: 10,
     borderRadius: 15,
   },
@@ -278,7 +278,7 @@ const styles = StyleSheet.create({
   label: {
     width: '40%',
     fontWeight: 'bold',
-    color: '#8B65BF',
+    color: '#fff',
     fontSize: 15,
   },
 
@@ -289,9 +289,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 5,
     marginBottom: 5,
-    backgroundColor: '#7374FA',
+    backgroundColor: '#e6e6e8',
     borderRadius: 10,
-    color: '#ffffff',
+    color: '#000000',
     fontSize: 15,
   },
   table: {
@@ -310,7 +310,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontWeight: 'bold',
     padding: 10,
-    backgroundColor: '#8B65BF',
+    backgroundColor: '#8990a2',
     color: '#ffffff',
     textAlign: 'center',
   },
@@ -318,6 +318,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 10,
     textAlign: 'center',
+    color: '#000',
   },
   textContainer: {
     flexDirection: 'row',
@@ -330,7 +331,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   button: {
-    backgroundColor: '#9C71D9',
+    backgroundColor: '#666f88',
     alignSelf: 'center',
     padding: 15,
     marginVertical: 10,

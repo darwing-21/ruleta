@@ -20,7 +20,7 @@ function AppStack() {
               fontWeight: 'bold',
             },
             headerStyle: {
-              backgroundColor: '#8B65BF',
+              backgroundColor: '#666f88',
             },
           }}
         />
@@ -37,7 +37,7 @@ function AppStack() {
               
             },
             headerStyle: {
-              backgroundColor: '#8B65BF',
+              backgroundColor: '#666f88',
             },
           }}
         />
@@ -52,7 +52,7 @@ function AppStack() {
               fontWeight: 'bold',
             },
             headerStyle: {
-              backgroundColor: '#8B65BF',
+              backgroundColor: '#666f88',
             },
           }}
         />
@@ -67,7 +67,7 @@ function AppStack() {
               fontWeight: 'bold',
             },
             headerStyle: {
-              backgroundColor: '#8B65BF',
+              backgroundColor: '#666f88',
             },
           }}
         />
@@ -82,7 +82,7 @@ function AppStack() {
               fontWeight: 'bold',
             },
             headerStyle: {
-              backgroundColor: '#8B65BF',
+              backgroundColor: '#666f88',
             },
           }}
         />

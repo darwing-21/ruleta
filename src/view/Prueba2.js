@@ -209,34 +209,35 @@ const Prueba = () => {
         <TouchableOpacity style={styles.button} onPress={handleCalcular}>
           <Text style={styles.buttonText}>Simular</Text>
         </TouchableOpacity>
-        {mostrarGrafico && (<>
-        <View style={styles.tableRow}>
-          <Text style={styles.tableHeader}>N</Text>
-          <Text style={styles.tableHeader}>Cant</Text>
-          <Text style={styles.tableHeader}>Apuesta</Text>
-          <Text style={styles.tableHeader}>Aleatorio</Text>
-          <Text style={styles.tableHeader}>Color</Text>
-        </View>
-        {iteraciones.map((iteracion, index) => (
-          <View style={styles.tableRow} key={index}>
-            <Text style={styles.tableData}>{iteracion.i}</Text>
-            <Text style={styles.tableData}>{iteracion.cantidad}</Text>
-            <Text style={styles.tableData}>{iteracion.apuesta}</Text>
-            <Text style={styles.tableData}>{iteracion.aleatorio}</Text>
-            <Text style={styles.tableData}>{iteracion.color}</Text>
-          </View>
-        ))}
-        <View style={styles.textContainer}>
-          <Text style={styles.p}>Cantidad final: </Text>
-          <Text style={styles.boldText}>{cantidadFinal}</Text>
-        </View>
-        <View style={styles.textContainer}>
-          <Text style={styles.p}>Cantidad de colores: </Text>
-          <Text style={styles.boldText}> ROJO = {rojo};</Text>
-          <Text style={styles.boldText}> NEGRO = {negro};</Text>
-          <Text style={styles.boldText}> VERDE = {verde};</Text>
-        </View>
-        <View style={styles.chartContainer}>
+        {mostrarGrafico && (
+          <>
+            <View style={styles.tableRow}>
+              <Text style={styles.tableHeader}>N</Text>
+              <Text style={styles.tableHeader}>Cant</Text>
+              <Text style={styles.tableHeader}>Apuesta</Text>
+              <Text style={styles.tableHeader}>Aleatorio</Text>
+              <Text style={styles.tableHeader}>Color</Text>
+            </View>
+            {iteraciones.map((iteracion, index) => (
+              <View style={styles.tableRow} key={index}>
+                <Text style={styles.tableData}>{iteracion.i}</Text>
+                <Text style={styles.tableData}>{iteracion.cantidad}</Text>
+                <Text style={styles.tableData}>{iteracion.apuesta}</Text>
+                <Text style={styles.tableData}>{iteracion.aleatorio}</Text>
+                <Text style={styles.tableData}>{iteracion.color}</Text>
+              </View>
+            ))}
+            <View style={styles.textContainer}>
+              <Text style={styles.p}>Cantidad final: </Text>
+              <Text style={styles.boldText}>{cantidadFinal}</Text>
+            </View>
+            <View style={styles.textContainer}>
+              <Text style={styles.p}>Cantidad de colores: </Text>
+              <Text style={styles.boldText}> ROJO = {rojo};</Text>
+              <Text style={styles.boldText}> NEGRO = {negro};</Text>
+              <Text style={styles.boldText}> VERDE = {verde};</Text>
+            </View>
+            <View style={styles.chartContainer}>
               <Pie
                 radius={80}
                 sections={[
@@ -268,11 +269,11 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     paddingTop: 10,
-    backgroundColor: '#E4CEF2',
+    backgroundColor: '#e6e6e8',
   },
   formContainer: {
     flexDirection: 'column',
-    backgroundColor: '#E4CEF2',
+    backgroundColor: '#a3a8b7',
     padding: 10,
     borderRadius: 15,
   },
@@ -285,7 +286,7 @@ const styles = StyleSheet.create({
   label: {
     width: '40%',
     fontWeight: 'bold',
-    color: '#8B65BF',
+    color: '#fff',
     fontSize: 15,
   },
 
@@ -296,9 +297,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 5,
     marginBottom: 5,
-    backgroundColor: '#7374FA',
+    backgroundColor: '#e6e6e8',
     borderRadius: 10,
-    color: '#ffffff',
+    color: '#000000',
     fontSize: 15,
   },
   table: {
@@ -317,7 +318,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontWeight: 'bold',
     padding: 10,
-    backgroundColor: '#8B65BF',
+    backgroundColor: '#8990a2',
     color: '#ffffff',
     textAlign: 'center',
   },
@@ -325,6 +326,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 10,
     textAlign: 'center',
+    color: '#000',
   },
   textContainer: {
     flexDirection: 'row',
@@ -337,7 +339,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   button: {
-    backgroundColor: '#9C71D9',
+    backgroundColor: '#666f88',
     alignSelf: 'center',
     padding: 15,
     marginVertical: 10,

@@ -11,8 +11,31 @@ import {
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import Pie from 'react-native-pie';
+import {
+  doc,
+  setDoc,
+  getFirestore,
+  addDoc,
+  collection,
+  getDocs,
+  onSnapshot,
+  query,
+} from 'firebase/firestore';
+import {
+  FirebaseAppProvider,
+  FirestoreProvider,
+  useFirestoreDocData,
+  useFirestore,
+  useFirebaseApp,
+} from 'reactfire';
+import {set} from 'firebase/database';
 
 const Comparacion = () => {
+  const firestoreInstance = getFirestore(useFirebaseApp());
+  const firestore = getFirestore();
+  const [data, setData] = useState([]);
+  const [jug1, setJug1] = useState('');
+  const [jug2, setJug2] = useState('');
   const navigation = useNavigation();
   const [mostrarGrafico, setMostrarGrafico] = useState(false);
   const [apuesta, setApuesta] = useState('1');
@@ -103,6 +126,51 @@ const Comparacion = () => {
     setVerde(verde);
   };
 
+  const handleGuardar = async (cantidadI, cantidadI2) => {
+    try {
+      const values = {};
+      if (cantidadI > cantidadI2) {
+        values.jugador1 = 1;
+        values.jugador2 = 0;
+      } else {
+        values.jugador1 = 0;
+        values.jugador2 = 1;
+      }
+
+      const collectionRef = collection(firestore, 'simulaciones');
+      await addDoc(collectionRef, values);
+
+      console.log('Datos guardados en Firestore con éxito');
+    } catch (error) {
+      console.error('Error al guardar datos en Firestore:', error);
+    }
+  };
+  const handleMostrar = async () => {
+    const collectionRef = collection(firestore, 'simulaciones');
+    const q = query(collectionRef);
+    const unsubscribe = onSnapshot(q, snapshot => {
+      const mensajes = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setData(mensajes);
+      handleActualizar(mensajes);
+    });
+    return () => unsubscribe();
+  };
+  const handleActualizar = mensajes => {
+    let juga1 = 0;
+    let juga2 = 0;
+    for (let i = 0; i < mensajes.length; i++) {
+      if (mensajes[i].jugador1 === 1) {
+        juga1 = juga1 + 1;
+      } else {
+        juga2 = juga2 + 1;
+      }
+    }
+    setJug1(juga1);
+    setJug2(juga2);
+  };
   const handleCalcular = () => {
     const apuestaParseado = parseFloat(apuesta);
     const corridaParseado = parseFloat(corrida);
@@ -210,143 +278,151 @@ const Comparacion = () => {
       setCantidadFinal2(cantidadI2);
       contarColors(colorsArray);
       setMostrarGrafico(true);
-
+      handleGuardar(cantidadI, cantidadI2);
+      handleMostrar();
       if (cantidadI > cantidadI2) {
         setEstrategia(
-          'La mejor estrategia es del jugador 1 con una cantidad final de ' +
+          'La mejor estrategia en esta iteración es del jugador 1 con una cantidad final de ' +
             cantidadI,
         );
       } else {
         setEstrategia(
-          'La mejor estrategia es del jugador 2 con un cantidad final de ' +
+          'La mejor estrategia en esta iteración es del jugador 2 con un cantidad final de ' +
             cantidadI2,
         );
       }
     }
   };
   return (
-    <ScrollView contentContainerStyle={styles.scrollContainer}>
-      <View style={styles.container}>
-        <View style={styles.formContainer}>
-          <View style={styles.inputContainer}>
-            <Text style={styles.label}>Cant. corridas:</Text>
-            <TextInput
-              style={styles.input}
-              onChangeText={text => setCorrida(text)}
-              keyboardType="numeric"
-              value={corrida}
-            />
-          </View>
-          <View style={styles.inputContainer}>
-            <Text style={styles.label}>Cantidad Inicial:</Text>
-            <TextInput
-              style={styles.input}
-              onChangeText={text => setCantidad(text)}
-              keyboardType="numeric"
-              value={cantidad}
-            />
-          </View>
-          <View style={styles.inputContainer}>
-            <Text style={styles.label}>Apuesta:</Text>
-            <TextInput
-              style={styles.input}
-              onChangeText={text => setApuesta(text)}
-              keyboardType="numeric"
-              value={apuesta}
-            />
-          </View>
-          <View style={styles.inputContainer}>
-            <Text style={styles.label}>Color:</Text>
-            <TextInput
-              style={styles.input}
-              onChangeText={text => setColor(text)}
-              keyboardType="default"
-              value={color}
-            />
-          </View>
-        </View>
-
-        <TouchableOpacity style={styles.button} onPress={handleCalcular}>
-          <Text style={styles.buttonText}>Simular</Text>
-        </TouchableOpacity>
-        {mostrarGrafico && (
-          <>
-            <Text style={styles.title}>ESTRATEGIA JUGADOR 1</Text>
-            <View style={styles.tableRow}>
-              <Text style={styles.tableHeader}>N</Text>
-              <Text style={styles.tableHeader}>Cant</Text>
-              <Text style={styles.tableHeader}>Apuesta</Text>
-              <Text style={styles.tableHeader}>Aleatorio</Text>
-              <Text style={styles.tableHeader}>Color</Text>
-            </View>
-            {iteraciones1.map((iteracion, index) => (
-              <View style={styles.tableRow} key={index}>
-                <Text style={styles.tableData}>{iteracion.i}</Text>
-                <Text style={styles.tableData}>{iteracion.cantidad}</Text>
-                <Text style={styles.tableData}>{iteracion.apuesta}</Text>
-                <Text style={styles.tableData}>{iteracion.aleatorio}</Text>
-                <Text style={styles.tableData}>{iteracion.color}</Text>
-              </View>
-            ))}
-            <View style={styles.textContainer}>
-              <Text style={styles.p}>Cantidad final: </Text>
-              <Text style={styles.boldText}>{cantidadFinal1}</Text>
-            </View>
-            <Text style={styles.title}>ESTRATEGIA JUGADOR 2</Text>
-            <View style={styles.tableRow}>
-              <Text style={styles.tableHeader}>N</Text>
-              <Text style={styles.tableHeader}>Cant</Text>
-              <Text style={styles.tableHeader}>Apuesta</Text>
-              <Text style={styles.tableHeader}>Aleatorio</Text>
-              <Text style={styles.tableHeader}>Color</Text>
-            </View>
-            {iteraciones2.map((iteracion, index) => (
-              <View style={styles.tableRow} key={index}>
-                <Text style={styles.tableData}>{iteracion.i}</Text>
-                <Text style={styles.tableData}>{iteracion.cantidad}</Text>
-                <Text style={styles.tableData}>{iteracion.apuesta}</Text>
-                <Text style={styles.tableData}>{iteracion.aleatorio}</Text>
-                <Text style={styles.tableData}>{iteracion.color}</Text>
-              </View>
-            ))}
-            <View style={styles.textContainer}>
-              <Text style={styles.p}>Cantidad final: </Text>
-              <Text style={styles.boldText}>{cantidadFinal2}</Text>
-            </View>
-
-            <View style={styles.textContainer}>
-              <Text style={styles.p}>Cantidad de colores: </Text>
-              <Text style={styles.boldText}> ROJO = {rojo};</Text>
-              <Text style={styles.boldText}> NEGRO = {negro};</Text>
-              <Text style={styles.boldText}> VERDE = {verde};</Text>
-            </View>
-
-            
-            <View style={styles.chartContainer}>
-              <Pie
-                radius={80}
-                sections={[
-                  {
-                    percentage: rojo,
-                    color: 'red',
-                  },
-                  {
-                    percentage: negro,
-                    color: 'black',
-                  },
-                  {
-                    percentage: verde,
-                    color: 'green',
-                  },
-                ]}
-                strokeCap={'butt'}
+    <FirestoreProvider sdk={firestoreInstance}>
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <View style={styles.container}>
+          <View style={styles.formContainer}>
+            <View style={styles.inputContainer}>
+              <Text style={styles.label}>Cant. corridas:</Text>
+              <TextInput
+                style={styles.input}
+                onChangeText={text => setCorrida(text)}
+                keyboardType="numeric"
+                value={corrida}
               />
             </View>
-            <Text style={styles.title}>{estrategia}</Text>
-          </>
-        )}
-      </View>
-    </ScrollView>
+            <View style={styles.inputContainer}>
+              <Text style={styles.label}>Cantidad Inicial:</Text>
+              <TextInput
+                style={styles.input}
+                onChangeText={text => setCantidad(text)}
+                keyboardType="numeric"
+                value={cantidad}
+              />
+            </View>
+            <View style={styles.inputContainer}>
+              <Text style={styles.label}>Apuesta:</Text>
+              <TextInput
+                style={styles.input}
+                onChangeText={text => setApuesta(text)}
+                keyboardType="numeric"
+                value={apuesta}
+              />
+            </View>
+            <View style={styles.inputContainer}>
+              <Text style={styles.label}>Color:</Text>
+              <TextInput
+                style={styles.input}
+                onChangeText={text => setColor(text)}
+                keyboardType="default"
+                value={color}
+              />
+            </View>
+          </View>
+
+          <TouchableOpacity style={styles.button} onPress={handleCalcular}>
+            <Text style={styles.buttonText}>Simular</Text>
+          </TouchableOpacity>
+          {mostrarGrafico && (
+            <>
+              <Text style={styles.title}>ESTRATEGIA JUGADOR 1</Text>
+              <View style={styles.tableRow}>
+                <Text style={styles.tableHeader}>N</Text>
+                <Text style={styles.tableHeader}>Cant</Text>
+                <Text style={styles.tableHeader}>Apuesta</Text>
+                <Text style={styles.tableHeader}>Aleatorio</Text>
+                <Text style={styles.tableHeader}>Color</Text>
+              </View>
+              {iteraciones1.map((iteracion, index) => (
+                <View style={styles.tableRow} key={index}>
+                  <Text style={styles.tableData}>{iteracion.i}</Text>
+                  <Text style={styles.tableData}>{iteracion.cantidad}</Text>
+                  <Text style={styles.tableData}>{iteracion.apuesta}</Text>
+                  <Text style={styles.tableData}>{iteracion.aleatorio}</Text>
+                  <Text style={styles.tableData}>{iteracion.color}</Text>
+                </View>
+              ))}
+              <View style={styles.textContainer}>
+                <Text style={styles.p}>Cantidad final: </Text>
+                <Text style={styles.boldText}>{cantidadFinal1}</Text>
+              </View>
+              <Text style={styles.title}>ESTRATEGIA JUGADOR 2</Text>
+              <View style={styles.tableRow}>
+                <Text style={styles.tableHeader}>N</Text>
+                <Text style={styles.tableHeader}>Cant</Text>
+                <Text style={styles.tableHeader}>Apuesta</Text>
+                <Text style={styles.tableHeader}>Aleatorio</Text>
+                <Text style={styles.tableHeader}>Color</Text>
+              </View>
+              {iteraciones2.map((iteracion, index) => (
+                <View style={styles.tableRow} key={index}>
+                  <Text style={styles.tableData}>{iteracion.i}</Text>
+                  <Text style={styles.tableData}>{iteracion.cantidad}</Text>
+                  <Text style={styles.tableData}>{iteracion.apuesta}</Text>
+                  <Text style={styles.tableData}>{iteracion.aleatorio}</Text>
+                  <Text style={styles.tableData}>{iteracion.color}</Text>
+                </View>
+              ))}
+              <View style={styles.textContainer}>
+                <Text style={styles.p}>Cantidad final: </Text>
+                <Text style={styles.boldText}>{cantidadFinal2}</Text>
+              </View>
+
+              <View style={styles.textContainer}>
+                <Text style={styles.p}>Cantidad de colores: </Text>
+                <Text style={styles.boldText}> ROJO = {rojo};</Text>
+                <Text style={styles.boldText}> NEGRO = {negro};</Text>
+                <Text style={styles.boldText}> VERDE = {verde};</Text>
+              </View>
+
+              <View style={styles.chartContainer}>
+                <Pie
+                  radius={80}
+                  sections={[
+                    {
+                      percentage: rojo,
+                      color: 'red',
+                    },
+                    {
+                      percentage: negro,
+                      color: 'black',
+                    },
+                    {
+                      percentage: verde,
+                      color: 'green',
+                    },
+                  ]}
+                  strokeCap={'butt'}
+                />
+              </View>
+              <Text style={styles.title}>{estrategia}{'\n\n'}</Text>
+
+              <View style={styles.chartContainer}>
+                  <Text style={styles.title}>RESULTADOS ACTUALES: </Text>
+                  <Text style={styles.boldText1}> JUGADOR 1 = {jug1};</Text>
+                  <Text style={styles.boldText1}> JUGADOR 2 = {jug2};</Text>                
+              </View>
+            </>
+          )}
+        </View>
+      </ScrollView>
+    </FirestoreProvider>
   );
 };
 const styles = StyleSheet.create({
@@ -354,11 +430,11 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     paddingTop: 10,
-    backgroundColor: '#E4CEF2',
+    backgroundColor: '#e6e6e8',
   },
   formContainer: {
     flexDirection: 'column',
-    backgroundColor: '#E4CEF2',
+    backgroundColor: '#a3a8b7',
     padding: 10,
     borderRadius: 15,
   },
@@ -371,7 +447,7 @@ const styles = StyleSheet.create({
   label: {
     width: '40%',
     fontWeight: 'bold',
-    color: '#8B65BF',
+    color: '#fff',
     fontSize: 15,
   },
 
@@ -382,9 +458,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 5,
     marginBottom: 5,
-    backgroundColor: '#7374FA',
+    backgroundColor: '#e6e6e8',
     borderRadius: 10,
-    color: '#ffffff',
+    color: '#000000',
     fontSize: 15,
   },
   table: {
@@ -403,7 +479,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontWeight: 'bold',
     padding: 10,
-    backgroundColor: '#8B65BF',
+    backgroundColor: '#8990a2',
     color: '#ffffff',
     textAlign: 'center',
   },
@@ -411,6 +487,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 10,
     textAlign: 'center',
+    color: '#000',
   },
   textContainer: {
     flexDirection: 'row',
@@ -422,8 +499,12 @@ const styles = StyleSheet.create({
   boldText: {
     fontWeight: 'bold',
   },
+  boldText1: {
+    fontWeight: 'bold',
+    alignSelf: 'center',
+  },
   button: {
-    backgroundColor: '#9C71D9',
+    backgroundColor: '#666f88',
     alignSelf: 'center',
     padding: 15,
     marginVertical: 10,

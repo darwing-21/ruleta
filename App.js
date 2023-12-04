@@ -1,12 +1,15 @@
-import { View, Text } from 'react-native'
-import React from 'react'
-import AppStack from './stack'
+import React from 'react';
+import {NavigationContainer} from '@react-navigation/native';
 import 'react-native-gesture-handler';
+import AppStack from './stack';
+import {FirebaseAppProvider} from 'reactfire';
+import firebase from './firebase-config';
 
 const App = () => {
   return (
-    <AppStack />
-  )
-}
-
-export default App
+    <FirebaseAppProvider firebaseConfig={firebase}>
+        <AppStack />
+    </FirebaseAppProvider>
+  );
+};
+export default App;
