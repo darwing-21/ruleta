@@ -396,15 +396,15 @@ const Comparacion = () => {
                   radius={80}
                   sections={[
                     {
-                      percentage: rojo,
+                      percentage: (rojo/corrida)*100,
                       color: 'red',
                     },
                     {
-                      percentage: negro,
+                      percentage: (negro/corrida)*100,
                       color: 'black',
                     },
                     {
-                      percentage: verde,
+                      percentage: (verde/corrida)*100,
                       color: 'green',
                     },
                   ]}
